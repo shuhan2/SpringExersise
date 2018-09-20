@@ -20,5 +20,18 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
 
+    @Override
+    public User updateUser(int id, User user) {
+        User originalUser = USERS.get(id);
+        originalUser.setName(user.getName());
+        USERS.put(originalUser.getId(), user);
+        return user;
+    }
+
+    @Override
+    public User findById(int id) {
+        return USERS.get(id);
+    }
+
 
 }

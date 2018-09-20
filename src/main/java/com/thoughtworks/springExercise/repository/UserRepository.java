@@ -8,4 +8,8 @@ public interface UserRepository {
     Collection<User> findUsers();
 
     User createUser(User user);
+
+    User updateUser(int id, User user);
+
+    User findById(int id);
 }

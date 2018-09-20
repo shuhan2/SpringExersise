@@ -20,4 +20,8 @@ public class UserStorage {
     public static void add(User...users) {
         Arrays.stream(users).forEach(user -> USERS.put(user.getId(), user));
     }
+
+    public static User getById(int id) {
+        return USERS.get(1);
+    }
 }

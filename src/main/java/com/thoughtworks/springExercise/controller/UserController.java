@@ -5,10 +5,7 @@ import com.thoughtworks.springExercise.repository.Impl.UserRepositoryImpl;
 import com.thoughtworks.springExercise.repository.Impl.UserStorage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -27,6 +24,12 @@ public class UserController {
         UserRepositoryImpl userRepository = new UserRepositoryImpl();
         userRepository.createUser(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user) {
+        UserRepositoryImpl userRepository = new UserRepositoryImpl();
+        return new ResponseEntity<>(userRepository.updateUser(id, user), HttpStatus.OK);
     }
 
 
