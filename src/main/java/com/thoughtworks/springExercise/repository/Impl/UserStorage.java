@@ -28,4 +28,15 @@ public class UserStorage {
     public static Map<Integer, User> getUsers() {
         return USERS;
     }
+
+    public static User getByName(String name) {
+        for (Map.Entry<Integer, User> userEntry : USERS.entrySet()) {
+            if (userEntry.getValue().getName().equals(name)) {
+
+                return userEntry.getValue();
+            }
+        }
+
+        return null;
+    }
 }

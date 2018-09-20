@@ -29,4 +29,13 @@ public class ContactStorage {
     public static Map<Integer, Contact> getContacts() {
         return CONTACTS;
     }
+
+    public static Contact getContactByName(Map<Integer, Contact> contacts, String name) {
+        for (Map.Entry<Integer, Contact> contactEntry : contacts.entrySet()) {
+            if (contactEntry.getValue().getName().equals(name)) {
+                return contactEntry.getValue();
+            }
+        }
+        return null;
+    }
 }

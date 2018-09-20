@@ -34,4 +34,10 @@ public class ContactRepositoryImpl implements ContactRepository {
     public void deleteContact(int userId, int contactId) {
         UserStorage.getById(userId).getContacts().remove(contactId);
     }
+
+    @Override
+    public Contact findContactByName(String userName, String contactName) {
+       Map<Integer, Contact> contacts = UserStorage.getByName(userName).getContacts();
+       return ContactStorage.getContactByName(contacts, contactName);
+    }
 }

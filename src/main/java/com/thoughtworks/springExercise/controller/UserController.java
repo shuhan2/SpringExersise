@@ -65,6 +65,12 @@ public class UserController {
         contactRepository.deleteContact(userId, contactId);
     }
 
+    @RequestMapping("/users/{userName}/contacts/{contactName}")
+    public Contact findContactByName(@PathVariable String userName, @PathVariable String contactName) {
+        ContactRepositoryImpl contactRepository = new ContactRepositoryImpl();
+        return contactRepository.findContactByName(userName, contactName);
+    }
+
 
 
 

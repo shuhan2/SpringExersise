@@ -31,7 +31,7 @@ public class ConcatControllerTest {
         mockMvc =  standaloneSetup(new UserController()).build();
         UserStorage.clear();
         contact = new Contact(1, "zhang san", 123456,"female", 18);
-        user = new User(5, "zhang lan", new HashMap<>());
+        user = new User(5, "sjyuan", new HashMap<>());
         UserStorage.add(user);
     }
 
@@ -86,7 +86,19 @@ public class ConcatControllerTest {
         mockMvc.perform(delete("/api/users/5/contacts/1")).
                 andExpect(status().is(204));
         assertEquals(originalSize - 1, user.getContacts().size());
+    }
 
+    @Test
+    void should_return_contact_with_user_name_is_sjyuan_and_contact_name_is_kgyang() throws Exception {
+        Contact kgContact = new Contact(6, "kgyang", 2821171, "male", 18);
 
+        user.getContacts().put(contact.getId(), kgContact);
+        mockMvc.perform(get("/api/users/sjyuan/contacts/kgyang")).
+                andExpect(status().is(200)).
+                andExpect(jsonPath("$.id").value(6)).
+                andExpect(jsonPath("$.name").value("kgyang")).
+                andExpect(jsonPath("$.phoneNumber").value(2821171)).
+                andExpect(jsonPath("$.gender").value("male")).
+                andExpect(jsonPath("$.age").value(18));
     }
 }
