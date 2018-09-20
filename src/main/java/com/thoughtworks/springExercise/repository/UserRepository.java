@@ -7,4 +7,5 @@ import java.util.Collection;
 public interface UserRepository {
     Collection<User> findUsers();
 
+    User createUser(User user);
 }
