@@ -20,9 +20,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 public class ConcatControllerTest {
-    public static final String WA_SI = "wa si";
-    public static final int SIXTEEN = 16;
-    public static final int PHONENUMBER = 2512371;
+    private static final String WA_SI = "wa si";
+    private static final int SIXTEEN = 16;
+    private static final int PHONENUMBER = 2512371;
     private MockMvc mockMvc;
     private User user;
     private Contact contact;
@@ -74,9 +74,9 @@ public class ConcatControllerTest {
                 content(new ObjectMapper().writeValueAsString(updatedContact))).
                 andExpect(status().is(200));
 
-        assertTrue(WA_SI.equals(UserStorage.getById(5).getContacts().get(1).getName()));
-        assertTrue(PHONENUMBER == UserStorage.getById(5).getContacts().get(1).getPhoneNumber());
-        assertTrue(SIXTEEN == (UserStorage.getById(5).getContacts().get(1).getAge()));
+        assertEquals(WA_SI, UserStorage.getById(5).getContacts().get(1).getName());
+        assertEquals(PHONENUMBER, UserStorage.getById(5).getContacts().get(1).getPhoneNumber());
+        assertEquals(SIXTEEN, UserStorage.getById(5).getContacts().get(1).getAge());
     }
 
     @Test
@@ -100,5 +100,15 @@ public class ConcatControllerTest {
                 andExpect(jsonPath("$.phoneNumber").value(2821171)).
                 andExpect(jsonPath("$.gender").value("male")).
                 andExpect(jsonPath("$.age").value(18));
+    }
+
+    @Test
+    void should_return_404_when_can_not_find_contact() throws Exception {
+        Contact kgContact = new Contact(6, "kgli", 2821171, "male", 18);
+
+        user.getContacts().put(contact.getId(), kgContact);
+        mockMvc.perform(get("/api/users/sjyuan/contacts/kgyang")).
+                andExpect(status().is(404));
+
     }
 }

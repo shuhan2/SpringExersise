@@ -66,10 +66,15 @@ public class UserController {
     }
 
     @RequestMapping("/users/{userName}/contacts/{contactName}")
-    public Contact findContactByName(@PathVariable String userName, @PathVariable String contactName) {
+    public ResponseEntity<Contact> findContactByName(@PathVariable String userName, @PathVariable String contactName) {
         ContactRepositoryImpl contactRepository = new ContactRepositoryImpl();
-        return contactRepository.findContactByName(userName, contactName);
+        Contact contact = contactRepository.findContactByName(userName, contactName);
+        if (contact == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(contact, HttpStatus.OK);
     }
+
 
 
 

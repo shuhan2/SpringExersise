@@ -37,7 +37,11 @@ public class ContactRepositoryImpl implements ContactRepository {
 
     @Override
     public Contact findContactByName(String userName, String contactName) {
-       Map<Integer, Contact> contacts = UserStorage.getByName(userName).getContacts();
-       return ContactStorage.getContactByName(contacts, contactName);
+        User user = UserStorage.getByName(userName);
+        if (user == null) {
+            return null;
+        }
+        Map<Integer, Contact> contacts = user.getContacts();
+        return ContactStorage.getContactByName(contacts, contactName);
     }
 }
