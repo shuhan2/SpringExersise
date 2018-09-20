@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RequestMapping("/api")
 @RestController
@@ -43,6 +44,12 @@ public class UserController {
     public ResponseEntity<Contact> createContact(@PathVariable int userId, @RequestBody Contact contact){
         ConcatRepositoryImpl contactRepository = new ConcatRepositoryImpl();
         return new ResponseEntity<>(contactRepository.createContactForUser(userId , contact), HttpStatus.CREATED);
+    }
+
+    @RequestMapping("/users/{userId}/contacts")
+    public ResponseEntity<List<Contact>> getContacts(@PathVariable int userId) {
+        ConcatRepositoryImpl contactRepository = new ConcatRepositoryImpl();
+        return new ResponseEntity<>(contactRepository.findContacts(userId), HttpStatus.OK);
     }
 
 

@@ -22,7 +22,7 @@ public class UserStorage {
     }
 
     public static User getById(int id) {
-        return USERS.get(1);
+        return USERS.get(id);
     }
 
     public static Map<Integer, User> getUsers() {

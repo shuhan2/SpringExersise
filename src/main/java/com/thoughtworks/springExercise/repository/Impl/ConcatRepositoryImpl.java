@@ -17,4 +17,9 @@ public class ConcatRepositoryImpl implements ConcatRepository {
         return contact;
 
     }
+
+    @Override
+    public List<Contact> findContacts(int id) {
+        return UserStorage.getById(id).getContacts();
+    }
 }
