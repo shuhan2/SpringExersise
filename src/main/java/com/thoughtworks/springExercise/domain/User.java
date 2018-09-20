@@ -1,16 +1,17 @@
 package com.thoughtworks.springExercise.domain;
 
 import java.util.List;
+import java.util.Map;
 
 public class User {
     private int id;
     private String name;
 
-    public void setContacts(List<Contact> contacts) {
+    public void setContacts(Map<Integer, Contact> contacts) {
         this.contacts = contacts;
     }
 
-    private List<Contact> contacts;
+    private Map<Integer, Contact> contacts;
     public User() {
     }
 
@@ -18,13 +19,13 @@ public class User {
         this.id = id;
         this.name = name;
     }
-    public User(int id, String name, List<Contact> contacts) {
+    public User(int id, String name, Map<Integer, Contact> contacts) {
         this.id = id;
         this.name = name;
         this.contacts = contacts;
     }
 
-    public List<Contact> getContacts() {
+    public Map<Integer, Contact> getContacts() {
         return contacts;
     }
 

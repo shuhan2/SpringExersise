@@ -2,7 +2,7 @@ package com.thoughtworks.springExercise.controller;
 
 import com.thoughtworks.springExercise.domain.Contact;
 import com.thoughtworks.springExercise.domain.User;
-import com.thoughtworks.springExercise.repository.Impl.ConcatRepositoryImpl;
+import com.thoughtworks.springExercise.repository.Impl.ContactRepositoryImpl;
 import com.thoughtworks.springExercise.repository.Impl.UserRepositoryImpl;
 import com.thoughtworks.springExercise.repository.Impl.UserStorage;
 import org.springframework.http.HttpStatus;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/api")
 @RestController
@@ -42,15 +43,23 @@ public class UserController {
     }
     @PostMapping("/users/{userId}/contacts")
     public ResponseEntity<Contact> createContact(@PathVariable int userId, @RequestBody Contact contact){
-        ConcatRepositoryImpl contactRepository = new ConcatRepositoryImpl();
+        ContactRepositoryImpl contactRepository = new ContactRepositoryImpl();
         return new ResponseEntity<>(contactRepository.createContactForUser(userId , contact), HttpStatus.CREATED);
     }
 
     @RequestMapping("/users/{userId}/contacts")
-    public ResponseEntity<List<Contact>> getContacts(@PathVariable int userId) {
-        ConcatRepositoryImpl contactRepository = new ConcatRepositoryImpl();
+    public ResponseEntity<Map<Integer, Contact>> getContacts(@PathVariable int userId ) {
+        ContactRepositoryImpl contactRepository = new ContactRepositoryImpl();
         return new ResponseEntity<>(contactRepository.findContacts(userId), HttpStatus.OK);
     }
+
+    @PutMapping("/users/{userId}/contacts/{contactId}")
+    public ResponseEntity<Contact> updateContact(@PathVariable int userId, @PathVariable int contactId, @RequestBody Contact contact ) {
+        ContactRepositoryImpl contactRepository = new ContactRepositoryImpl();
+        return new ResponseEntity<>(contactRepository.updateContact(userId, contactId, contact), HttpStatus.OK);
+    }
+
+
 
 
 
