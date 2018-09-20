@@ -1,24 +1,19 @@
 package com.thoughtworks.springExercise.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import com.thoughtworks.springExercise.domain.User;
 import com.thoughtworks.springExercise.repository.Impl.UserRepositoryImpl;
 import com.thoughtworks.springExercise.repository.Impl.UserStorage;
-import com.thoughtworks.springExercise.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -65,6 +60,7 @@ public class UserControllerTest {
     void should_update_user() throws Exception {
         User originalUser =  new User(1, "wang wu");
         UserStorage.add(originalUser);
+
         User updatedUser =  new User(1, "wang jin");
         UserRepositoryImpl userRepository = new UserRepositoryImpl();
         mockMvc.perform(put("/api/users/1").
@@ -75,12 +71,22 @@ public class UserControllerTest {
                 andExpect(jsonPath("$.id").value(1));
 
         assertEquals("wang jin", UserStorage.getById(1).getName());
+    }
 
+    @Test
+    void should_delete_user() throws Exception {
+        User originalUser =  new User(1, "wang wu");
+        UserStorage.add(originalUser);
 
+        mockMvc.perform(delete("/api/users/1")).
+                andExpect(status().is(204));
+
+        assertEquals(0, UserStorage.getUsers().size());
 
     }
 
     @AfterEach
     void teardown() {
+        UserStorage.clear();
     }
 }

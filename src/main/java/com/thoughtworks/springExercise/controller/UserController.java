@@ -1,6 +1,8 @@
 package com.thoughtworks.springExercise.controller;
 
+import com.thoughtworks.springExercise.domain.Contact;
 import com.thoughtworks.springExercise.domain.User;
+import com.thoughtworks.springExercise.repository.Impl.ConcatRepositoryImpl;
 import com.thoughtworks.springExercise.repository.Impl.UserRepositoryImpl;
 import com.thoughtworks.springExercise.repository.Impl.UserStorage;
 import org.springframework.http.HttpStatus;
@@ -22,8 +24,7 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User user) {
         UserStorage.add(user);
         UserRepositoryImpl userRepository = new UserRepositoryImpl();
-        userRepository.createUser(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(userRepository.createUser(user), HttpStatus.CREATED);
     }
 
     @PutMapping("/users/{id}")
@@ -31,6 +32,20 @@ public class UserController {
         UserRepositoryImpl userRepository = new UserRepositoryImpl();
         return new ResponseEntity<>(userRepository.updateUser(id, user), HttpStatus.OK);
     }
+
+    @DeleteMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable int id) {
+        UserRepositoryImpl userRepository = new UserRepositoryImpl();
+        userRepository.delete(id);
+    }
+    @PostMapping("/users/{userId}/contacts")
+    public ResponseEntity<Contact> createContact(@PathVariable int userId, @RequestBody Contact contact){
+        ConcatRepositoryImpl contactRepository = new ConcatRepositoryImpl();
+        return new ResponseEntity<>(contactRepository.createContactForUser(userId , contact), HttpStatus.CREATED);
+    }
+
+
 
 
 }

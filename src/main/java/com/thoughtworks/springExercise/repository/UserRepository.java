@@ -1,5 +1,6 @@
 package com.thoughtworks.springExercise.repository;
 
+import com.thoughtworks.springExercise.domain.Contact;
 import com.thoughtworks.springExercise.domain.User;
 
 import java.util.Collection;
@@ -12,4 +13,7 @@ public interface UserRepository {
     User updateUser(int id, User user);
 
     User findById(int id);
+
+    void delete(int id);
+
 }
