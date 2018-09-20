@@ -12,16 +12,15 @@ public class ContactRepositoryImpl implements ContactRepository {
     public Contact createContactForUser(int id, Contact contact) {
         UserRepositoryImpl userRepository = new UserRepositoryImpl();
         User user = userRepository.findById(id);
-        Map<Integer, Contact> contacts = user.getContacts();
-        contacts.put(contact.getId(), contact);
-        user.setContacts(contacts);
+        ContactStorage.add(contact);
+        user.getContacts().put(contact.getId(), contact);
         return contact;
-
     }
 
     @Override
     public Map<Integer, Contact> findContacts(int id) {
-         return UserStorage.getById(id).getContacts();
+
+        return UserStorage.getById(id).getContacts();
     }
 
     @Override
