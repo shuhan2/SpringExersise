@@ -1,10 +1,8 @@
 package com.thoughtworks.springExercise.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.springExercise.domain.Contact;
 import com.thoughtworks.springExercise.domain.User;
-import com.thoughtworks.springExercise.repository.Impl.UserRepositoryImpl;
 import com.thoughtworks.springExercise.repository.Impl.UserStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,17 +12,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 public class ConcatControllerTest {
-    public static final String WANG_SI = "wang si";
+    public static final String WA_SI = "wa si";
     public static final int SIXTEEN = 16;
+    public static final int PHONENUMBER = 2512371;
     private MockMvc mockMvc;
     private User user;
     private Contact contact;
@@ -58,35 +56,37 @@ public class ConcatControllerTest {
         user.getContacts().put(contact.getId(), contact);
         mockMvc.perform(get("/api/users/5/contacts")).
                 andExpect(status().is(200)).
-                andExpect(jsonPath("$[0].id").value(1)).
-                andExpect(jsonPath("$[0].name").value("zhang san")).
-                andExpect(jsonPath("$[0].phoneNumber").value(123456)).
-                andExpect(jsonPath("$[0].gender").value("female")).
-                andExpect(jsonPath("$[0].age").value(18));
-
+                andExpect(jsonPath("$['1'].id").value(1)).
+                andExpect(jsonPath("$['1'].name").value("zhang san")).
+                andExpect(jsonPath("$['1'].phoneNumber").value(123456)).
+                andExpect(jsonPath("$['1'].gender").value("female")).
+                andExpect(jsonPath("$['1'].age").value(18));
     }
 
 
     @Test
     void should_update_contact_in_a_user() throws Exception {
         user.getContacts().put(contact.getId(), contact);
-        Contact updatedContact = new Contact(1, "wa, si",2512371, "female", 16 );
+        Contact updatedContact = new Contact(1, "wa si",2512371, "female", 16 );
 
         mockMvc.perform(put("/api/users/5/contacts/1").
                 contentType(MediaType.APPLICATION_JSON_UTF8).
                 content(new ObjectMapper().writeValueAsString(updatedContact))).
-                andExpect(status().is(200)).
-                andExpect(jsonPath("$.id").value(1)).
-                andExpect(jsonPath("$.name").value("wa si")).
-                andExpect(jsonPath("$.phoneNumber").value(2512371)).
-                andExpect(jsonPath("$.gender").value("female")).
-                andExpect(jsonPath("$.age").value(16));
+                andExpect(status().is(200));
 
-        assertTrue(WANG_SI.equals(UserStorage.getById(5).getContacts().get(1).getName()));
-        assertTrue(2512371 == UserStorage.getById(5).getContacts().get(1).getPhoneNumber());
+        assertTrue(WA_SI.equals(UserStorage.getById(5).getContacts().get(1).getName()));
+        assertTrue(PHONENUMBER == UserStorage.getById(5).getContacts().get(1).getPhoneNumber());
         assertTrue(SIXTEEN == (UserStorage.getById(5).getContacts().get(1).getAge()));
     }
 
+    @Test
+    void should_delete_contact_in_a_user() throws Exception {
+        user.getContacts().put(contact.getId(), contact);
+        int originalSize = user.getContacts().size();
+        mockMvc.perform(delete("/api/users/5/contacts/1")).
+                andExpect(status().is(204));
+        assertEquals(originalSize - 1, user.getContacts().size());
 
 
+    }
 }

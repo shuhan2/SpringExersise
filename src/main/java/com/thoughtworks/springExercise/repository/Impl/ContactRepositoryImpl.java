@@ -26,8 +26,12 @@ public class ContactRepositoryImpl implements ContactRepository {
 
     @Override
     public Contact updateContact(int userId, int id, Contact contact) {
-        User user = UserStorage.getById(userId);
-        user.getContacts().remove(id);
-        return user.getContacts().put(id , contact);
+        UserStorage.getById(userId).getContacts().remove(id);
+        return UserStorage.getById(userId).getContacts().put(id , contact);
+    }
+
+    @Override
+    public void deleteContact(int userId, int contactId) {
+        UserStorage.getById(userId).getContacts().remove(contactId);
     }
 }

@@ -46,7 +46,6 @@ public class UserController {
         ContactRepositoryImpl contactRepository = new ContactRepositoryImpl();
         return new ResponseEntity<>(contactRepository.createContactForUser(userId , contact), HttpStatus.CREATED);
     }
-
     @RequestMapping("/users/{userId}/contacts")
     public ResponseEntity<Map<Integer, Contact>> getContacts(@PathVariable int userId ) {
         ContactRepositoryImpl contactRepository = new ContactRepositoryImpl();
@@ -59,7 +58,12 @@ public class UserController {
         return new ResponseEntity<>(contactRepository.updateContact(userId, contactId, contact), HttpStatus.OK);
     }
 
-
+    @DeleteMapping("/users/{userId}/contacts/{contactId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable int userId, @PathVariable int contactId) {
+        ContactRepositoryImpl contactRepository = new ContactRepositoryImpl();
+        contactRepository.deleteContact(userId, contactId);
+    }
 
 
 
